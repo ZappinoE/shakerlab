@@ -69,7 +69,13 @@ details p{color:var(--mut);font-size:13px;margin:8px 0}
 .ruler{height:140px}.fine{height:80px;margin-top:8px}
 [data-panel]{border-color:#6b4a0c;box-shadow:0 0 0 1px #ffb02022}
 .zoomrow{display:flex;gap:10px;align-items:center;margin:8px 0 2px;color:var(--mut);font-size:12px}.zoomrow .seg{flex:1}
-.cols,.col{display:grid;gap:12px;min-width:0}
+.top,.cols,.col{display:grid;gap:12px;min-width:0}
+@media (min-width:900px){.top{grid-template-columns:1fr 1fr;gap:16px;align-items:stretch}}
+@media (min-width:1100px){
+  [data-panel]{display:grid;grid-template-columns:1fr 1fr;column-gap:36px;align-items:center}
+  [data-panel]>h2,[data-panel]>canvas,[data-panel]>.zoomrow,[data-panel]>.hint,[data-panel]>.chips,[data-panel]>.nudge,[data-panel]>.bigfreq,[data-panel]>.row{grid-column:1/-1}
+  .bigfreq{max-width:320px}
+}
 .col{align-content:start}
 @media (min-width:900px){
   .wrap{max-width:none;padding:16px 28px 36px;gap:16px}
@@ -94,7 +100,7 @@ details p{color:var(--mut);font-size:13px;margin:8px 0}
 <div class="wrap">
 
 <header><h1>Shaker<span>Lab</span></h1><span class="chip" id="status">Fermo</span></header>
-<div class="cols"><div class="col">
+<div class="top">
 
 <section class="card">
   <div class="readout" id="readout"><b id="rf">40.0</b><small>Hz</small></div>
@@ -117,6 +123,7 @@ details p{color:var(--mut);font-size:13px;margin:8px 0}
   </div>
 </section>
 
+</div>
 <nav class="seg tabs" data-seg="mode">
   <button data-v="tone">Tono</button><button data-v="burst">Burst</button><button data-v="sweep">Sweep</button><button data-v="band">Banda</button>
 </nav>
@@ -179,7 +186,7 @@ details p{color:var(--mut);font-size:13px;margin:8px 0}
   <div class="hint">Il rumore viene filtrato (taglio ripido, 4° ordine) nella banda scelta e moltiplicato per una sinusoide: “AM” = sinusoide continua alla frequenza modulante; “arco” = un’unica mezza sinusoide che sale e scende lungo tutta la durata. Questa modalità usa il proprio rumore: la forma d'onda scelta sotto non influisce. Il livello non è calibrato fra bande diverse: parti con volume basso.</div>
 </section>
 
-</div><div class="col">
+<div class="cols"><div class="col">
 <!-- ONDA -->
 <section class="card">
   <h2>Forma d'onda</h2>
