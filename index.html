@@ -25,14 +25,14 @@ h2{font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:var(--mut)
 .chip.live{background:var(--accd);color:var(--acc);border-color:#6b4a0c}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px}
 .readout{display:flex;align-items:baseline;gap:8px;justify-content:center}
-.readout b{font-size:56px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-1px;transition:color .05s}
+.readout b{font-size:40px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-1px;transition:color .05s}
 .readout.live b{color:var(--acc)}
-.readout small{font-size:20px;color:var(--mut)}
-.readout.wide b{font-size:38px}
-.sub{text-align:center;color:var(--mut);font-size:13px;margin-bottom:8px;min-height:18px}
+.readout small{font-size:16px;color:var(--mut)}
+.readout.wide b{font-size:30px}
+.sub{text-align:center;color:var(--mut);font-size:12px;margin-bottom:6px;min-height:18px}
 canvas{display:block;width:100%;touch-action:none}
-#scope{height:110px;background:#0a0d11;border-radius:10px;border:1px solid var(--line)}
-.meter{height:5px;background:var(--card2);border-radius:3px;margin:8px 0 12px;overflow:hidden}.meter i{display:block;height:100%;width:0;background:var(--acc)}
+#scope{height:60px;background:#0a0d11;border-radius:10px;border:1px solid var(--line)}
+.meter{height:4px;background:var(--card2);border-radius:3px;margin:6px 0 10px;overflow:hidden}.meter i{display:block;height:100%;width:0;background:var(--acc)}
 .row{display:flex;gap:10px;align-items:center}
 button{font:inherit;color:var(--tx);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:9px 12px;cursor:pointer;touch-action:manipulation}
 button:active{filter:brightness(1.3)}
@@ -66,6 +66,9 @@ details p{color:var(--mut);font-size:13px;margin:8px 0}
 .hint{color:var(--mut);font-size:12px;margin-top:6px}
 .warn{border-color:#6b4a0c;background:#1d1708;color:#e7c27b;font-size:13px}
 @media (max-width:420px){.f{grid-template-columns:1fr}.f output{text-align:left}.readout b{font-size:46px}}
+.ruler{height:140px}.fine{height:80px;margin-top:8px}
+[data-panel]{border-color:#6b4a0c;box-shadow:0 0 0 1px #ffb02022}
+.zoomrow{display:flex;gap:10px;align-items:center;margin:8px 0 2px;color:var(--mut);font-size:12px}.zoomrow .seg{flex:1}
 .cols,.col{display:grid;gap:12px;min-width:0}
 .col{align-content:start}
 @media (min-width:900px){
@@ -73,10 +76,11 @@ details p{color:var(--mut);font-size:13px;margin:8px 0}
   .cols{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px;align-items:start}
   .col{gap:16px}
   .card{padding:18px}
-  #scope{height:min(26vh,240px)}
-  .readout b{font-size:76px}.readout small{font-size:24px}
-  .readout.wide b{font-size:52px}
-  #rTone,#rBurst,#rSweep,#rBand{height:130px!important}
+  #scope{height:84px}
+  .readout b{font-size:52px}.readout small{font-size:20px}
+  .readout.wide b{font-size:38px}
+  .ruler{height:190px!important}
+  .fine{height:104px!important}
   #eHarm{height:150px!important}#eDraw{height:170px!important}
 }
 @media (min-width:1500px){
@@ -120,21 +124,21 @@ details p{color:var(--mut);font-size:13px;margin:8px 0}
 <!-- TONO -->
 <section class="card" data-panel="tone">
   <h2>Righello – frequenza fissa</h2>
-  <canvas id="rTone" style="height:100px"></canvas>
+  <canvas id="rTone" class="ruler"></canvas><canvas id="fTone" class="fine"></canvas><div class="zoomrow"><span>Zoom fine</span><div class="seg" data-seg="zoom"><button data-v="2">±1 Hz</button><button data-v="10">±5 Hz</button><button data-v="50">±25 Hz</button></div></div>
   <div class="nudge">
     <button data-nudge="-10">−10</button><button data-nudge="-1">−1</button><button data-nudge="-0.1">−0.1</button>
     <button data-nudge="0.1">+0.1</button><button data-nudge="1">+1</button><button data-nudge="10">+10</button>
   </div>
-  <div class="bigfreq"><input type="number" inputmode="decimal" step="0.1" data-k="tone.freq"><span>Hz</span></div>
+  <div class="bigfreq"><input type="number" inputmode="decimal" step="0.01" data-k="tone.freq"><span>Hz</span></div>
   <div class="chips" id="chips"></div>
-  <div class="hint">Trascina sul righello, usa i tasti, oppure frecce ← → da tastiera (Shift ×10, Alt ×0.1).</div>
+  <div class="hint">Trascina sul righello grande, poi rifinisci su quello “zoom fine” (passo fino a 0,01 Hz). Anche rotellina del mouse (Shift ×10) e frecce ← → da tastiera.</div>
 </section>
 
 <!-- BURST -->
 <section class="card" data-panel="burst">
   <h2>Burst</h2>
-  <canvas id="rBurst" style="height:100px"></canvas>
-  <div class="f"><label>Frequenza</label><div class="ctl"><input type="number" inputmode="decimal" step="0.1" data-k="burst.freq"><span>Hz</span></div></div>
+  <canvas id="rBurst" class="ruler"></canvas><canvas id="fBurst" class="fine"></canvas><div class="zoomrow"><span>Zoom fine</span><div class="seg" data-seg="zoom"><button data-v="2">±1 Hz</button><button data-v="10">±5 Hz</button><button data-v="50">±25 Hz</button></div></div>
+  <div class="f"><label>Frequenza</label><div class="ctl"><input type="number" inputmode="decimal" step="0.01" data-k="burst.freq"><span>Hz</span></div></div>
   <div class="f"><label>Durata in</label><div class="seg" data-seg="burst.unit"><button data-v="cycles">Cicli</button><button data-v="ms">Millisecondi</button></div></div>
   <div class="f" data-show="burst.unit=cycles"><label>N° cicli</label><div class="ctl"><input type="range" min="1" max="100" step="1" data-k="burst.cycles"><output data-o="burst.cycles"></output></div></div>
   <div class="f" data-show="burst.unit=ms"><label>Durata</label><div class="ctl"><input type="range" min="5" max="2000" step="5" data-k="burst.ms"><output data-o="burst.ms"></output></div></div>
@@ -149,8 +153,8 @@ details p{color:var(--mut);font-size:13px;margin:8px 0}
 <!-- SWEEP -->
 <section class="card" data-panel="sweep">
   <h2>Sweep – trascina i due estremi</h2>
-  <canvas id="rSweep" style="height:100px"></canvas>
-  <div class="f"><label>Da / A</label><div class="ctl"><input type="number" inputmode="decimal" step="0.1" data-k="sweep.f1"><span>→</span><input type="number" inputmode="decimal" step="0.1" data-k="sweep.f2"><span>Hz</span></div></div>
+  <canvas id="rSweep" class="ruler"></canvas><canvas id="fSweep" class="fine"></canvas><div class="zoomrow"><span>Zoom fine</span><div class="seg" data-seg="zoom"><button data-v="2">±1 Hz</button><button data-v="10">±5 Hz</button><button data-v="50">±25 Hz</button></div></div>
+  <div class="f"><label>Da / A</label><div class="ctl"><input type="number" inputmode="decimal" step="0.01" data-k="sweep.f1"><span>→</span><input type="number" inputmode="decimal" step="0.01" data-k="sweep.f2"><span>Hz</span></div></div>
   <div class="f"><label>Durata tratta</label><div class="ctl"><input type="range" min="0" max="1000" data-log="1" data-lo="0.5" data-hi="600" data-k="sweep.dur"><output data-o="sweep.dur"></output></div></div>
   <div class="f"><label>Curva</label><div class="seg" data-seg="sweep.curve"><button data-v="log">Logaritmica</button><button data-v="lin">Lineare</button></div></div>
   <div class="f"><label>Direzione</label><div class="seg" data-seg="sweep.dir"><button data-v="up">↗ Sale</button><button data-v="down">↘ Scende</button><button data-v="updown">↗↘ Andata/ritorno</button></div></div>
@@ -163,8 +167,8 @@ details p{color:var(--mut);font-size:13px;margin:8px 0}
 <!-- BANDA -->
 <section class="card" data-panel="band">
   <h2>Banda di frequenze modulata</h2>
-  <canvas id="rBand" style="height:100px"></canvas>
-  <div class="f"><label>Banda da / a</label><div class="ctl"><input type="number" inputmode="decimal" step="0.1" data-k="band.f1"><span>→</span><input type="number" inputmode="decimal" step="0.1" data-k="band.f2"><span>Hz</span></div></div>
+  <canvas id="rBand" class="ruler"></canvas><canvas id="fBand" class="fine"></canvas><div class="zoomrow"><span>Zoom fine</span><div class="seg" data-seg="zoom"><button data-v="2">±1 Hz</button><button data-v="10">±5 Hz</button><button data-v="50">±25 Hz</button></div></div>
+  <div class="f"><label>Banda da / a</label><div class="ctl"><input type="number" inputmode="decimal" step="0.01" data-k="band.f1"><span>→</span><input type="number" inputmode="decimal" step="0.01" data-k="band.f2"><span>Hz</span></div></div>
   <div class="f"><label>Contenuto</label><div class="seg" data-seg="band.noise"><button data-v="white">Rumore bianco</button><button data-v="pink">Rumore rosa</button></div></div>
   <div class="f"><label>Modulazione</label><div class="seg" data-seg="band.mtype"><button data-v="am">Sinusoide (AM)</button><button data-v="window">Un arco di sinusoide</button></div></div>
   <div class="f" data-show="band.mtype=am"><label>Freq. modulante</label><div class="ctl"><input type="range" min="0" max="1000" data-log="1" data-lo="0.1" data-hi="50" data-k="band.mrate"><output data-o="band.mrate"></output></div></div>
@@ -246,7 +250,7 @@ const DEF={
   out:{vol:20,cap:60,chan:'lr'},
   am:{on:false,rate:4,depth:50,shape:'sine'},
   flt:{hpOn:true,hp:5,lpOn:false,lp:300},
-  timer:0,marks:[]
+  timer:0,marks:[],zoom:'10'
 };
 function merge(t,s){for(const k in s){if(s[k]&&typeof s[k]==='object'&&!Array.isArray(s[k])&&t[k]&&typeof t[k]==='object')merge(t[k],s[k]);else t[k]=s[k];}}
 let S=clone(DEF);
@@ -268,7 +272,7 @@ function limits(p){
 }
 const volGain=v=>Math.pow(clamp(v,0,S.out.cap)/100,2);
 const dB=g=>g<=0?'−∞ dB':(20*Math.log10(g)).toFixed(0)+' dB';
-const fmtHz=f=>f<100?f.toFixed(1):f<1000?f.toFixed(0):(f/1000).toFixed(2)+'k';
+const fmtHz=f=>f<100?f.toFixed(2):f<1000?f.toFixed(1):(f/1000).toFixed(2)+'k';
 const FMT={
   'out.vol':v=>v+' % · '+dB(volGain(v)),'out.cap':v=>v+' %','burst.rate':v=>v+' /s','burst.cycles':v=>v+' cicli',
   'burst.ms':v=>v+' ms','burst.att':v=>v+' ms','burst.rel':v=>v+' ms','sweep.dur':v=>v+' s','wave.duty':v=>v+' %',
@@ -573,7 +577,7 @@ function onParam(p){
   else if(p.startsWith('out.')){applyVol();applyChan();}
   else if(p.startsWith('am.'))applyAM();
   else if(p.startsWith('flt.'))applyFilters();
-  if(p==='mode'||p==='burst.trig')updateHeader();
+  updateHeader();
 }
 
 /* ---------- UI ---------- */
@@ -627,22 +631,30 @@ const rulers=[];
 const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 function quant(f){const s=f<10?0.1:f<100?0.5:f<1000?1:10;return +(Math.round(f/s)*s).toFixed(2);}
 const lab=v=>v>=1000?(+(v/1000).toFixed(2))+'k':String(+v.toFixed(2));
+const qstep=f=>f<10?0.1:f<100?0.5:f<1000?1:10;
+const fstep=()=>{const s=+S.zoom;return s<=2?0.01:s<=10?0.05:0.1;};
 class Ruler{
   constructor(cv,paths,opt={}){
-    this.cv=cv;this.paths=paths;this.drag=-1;this.cursor=opt.cursor||false;rulers.push(this);
-    cv.addEventListener('pointerdown',e=>{e.preventDefault();cv.setPointerCapture(e.pointerId);this.drag=this.pick(e);this.move(e);});
+    this.cv=cv;this.paths=paths;this.drag=-1;this._s=0;this.cursor=opt.cursor||false;rulers.push(this);
+    cv.addEventListener('pointerdown',e=>{e.preventDefault();cv.setPointerCapture(e.pointerId);this.drag=this.pick(e);this._s=this.drag;this.move(e);});
     cv.addEventListener('pointermove',e=>{if(this.drag>=0)this.move(e);});
-    const up=()=>{this.drag=-1;};cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+    const up=()=>{this.drag=-1;rulers.forEach(r=>r.draw());};
+    cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+    cv.addEventListener('wheel',e=>{e.preventDefault();const p=this.paths[this.cur()];setVal(p,+(get(p)+(e.deltaY<0?1:-1)*(e.shiftKey?10:1)*this.unit()).toFixed(3));},{passive:false});
     new ResizeObserver(()=>this.draw()).observe(cv);
   }
+  cur(){return this._s;}
+  unit(){return qstep(get(this.paths[this.cur()]));}
+  step(f){return quant(f);}
+  rng(){return{lo:S.min,hi:S.max,log:S.scale==='log'};}
   fx(e){const r=this.cv.getBoundingClientRect();return clamp((e.clientX-r.left)/r.width,0,1);}
-  t2f(t){return S.scale==='log'?S.min*Math.pow(S.max/S.min,t):S.min+(S.max-S.min)*t;}
-  f2t(f){return S.scale==='log'?Math.log(f/S.min)/Math.log(S.max/S.min):(f-S.min)/(S.max-S.min);}
+  t2f(t){const R=this.rng();return R.log?R.lo*Math.pow(R.hi/R.lo,t):R.lo+(R.hi-R.lo)*t;}
+  f2t(f){const R=this.rng();return R.log?Math.log(f/R.lo)/Math.log(R.hi/R.lo):(f-R.lo)/(R.hi-R.lo);}
   pick(e){const t=this.fx(e);let best=0,bd=9;this.paths.forEach((p,i)=>{const d=Math.abs(this.f2t(get(p))-t);if(d<bd){bd=d;best=i;}});return best;}
-  move(e){setVal(this.paths[this.drag],quant(this.t2f(this.fx(e))));}
-  ticks(){
-    const out=[],{min,max}=S;
-    if(S.scale==='log'){
+  move(e){setVal(this.paths[this.drag],this.step(this.t2f(this.fx(e))));}
+  ticks(R){
+    const out=[],min=R.lo,max=R.hi;
+    if(R.log){
       const dec=Math.log10(max/min);
       for(let d=Math.floor(Math.log10(min));d<=Math.ceil(Math.log10(max));d++)for(let m=1;m<10;m++){
         const v=+(m*Math.pow(10,d)).toPrecision(6);if(v<min*0.9999||v>max*1.0001)continue;
@@ -659,34 +671,52 @@ class Ruler{
     if(cv.width!==Math.round(w*dpr)||cv.height!==Math.round(h*dpr)){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);}
     const c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
     const acc=css('--acc'),mut=css('--mut'),line=css('--line'),tx=css('--tx');
-    const base=h-20,top=26,X=f=>this.f2t(f)*(w-2)+1;
+    const R=this.rng(),big=!(this instanceof FineRuler);
+    const T=f=>R.log?Math.log(f/R.lo)/Math.log(R.hi/R.lo):(f-R.lo)/(R.hi-R.lo);
+    const bh=big?24:19,top=bh+(big?16:11),base=h-20,X=f=>T(f)*(w-2)+1;
     c.fillStyle='#0a0d11';c.beginPath();c.roundRect(0,top,w,base-top,8);c.fill();
-    c.strokeStyle=line;c.stroke();
+    c.strokeStyle=big?'#6b4a0c':line;c.lineWidth=1;c.stroke();
     if(this.paths.length===2){
-      const x1=X(get(this.paths[0])),x2=X(get(this.paths[1]));
+      const x1=clamp(X(get(this.paths[0])),0,w),x2=clamp(X(get(this.paths[1])),0,w);
       c.fillStyle=acc+'33';c.fillRect(Math.min(x1,x2),top,Math.abs(x2-x1),base-top);
     }
     c.font='11px system-ui,sans-serif';c.textAlign='center';
-    for(const t of this.ticks()){
+    for(const t of this.ticks(R)){
       const x=X(t.v);c.strokeStyle=t.major?mut:line;c.lineWidth=1;
       c.beginPath();c.moveTo(x,base);c.lineTo(x,base-(t.major?22:11));c.stroke();
-      if(t.label){c.fillStyle=mut;c.fillText(lab(t.v),clamp(x,12,w-12),h-5);}
+      if(t.label){c.fillStyle=mut;c.fillText(lab(t.v),clamp(x,14,w-14),h-5);}
     }
-    if(this.cursor&&E.playing){const x=X(clamp(curFreq(),S.min,S.max));c.strokeStyle=tx;c.lineWidth=2;c.beginPath();c.moveTo(x,top);c.lineTo(x,base);c.stroke();}
-    this.paths.forEach(p=>{
-      const f=get(p),x=X(f);
-      c.strokeStyle=acc;c.lineWidth=3;c.beginPath();c.moveTo(x,top-2);c.lineTo(x,base);c.stroke();
-      c.fillStyle=acc;c.beginPath();c.arc(x,top-2,5,0,7);c.fill();
-      const txt=fmtHz(f)+' Hz',tw=c.measureText(txt).width+14,bx=clamp(x-tw/2,0,w-tw);
-      c.fillStyle=acc;c.beginPath();c.roundRect(bx,0,tw,17,6);c.fill();
-      c.fillStyle='#1a1200';c.font='bold 11px system-ui,sans-serif';c.fillText(txt,bx+tw/2,12);c.font='11px system-ui,sans-serif';
+    if(this.cursor&&E.playing){const f=curFreq();if(T(f)>=0&&T(f)<=1){const x=X(f);c.strokeStyle=tx;c.lineWidth=2;c.beginPath();c.moveTo(x,top);c.lineTo(x,base);c.stroke();}}
+    this.paths.forEach((p,i)=>{
+      const f=get(p),t=T(f);if(t<-0.001||t>1.001)return;
+      const x=X(f),isSel=this.paths.length===1||i===this.cur(),col=isSel?acc:acc+'88';
+      c.strokeStyle=col;c.lineWidth=big?4:3;c.beginPath();c.moveTo(x,top-5);c.lineTo(x,base);c.stroke();
+      c.fillStyle=col;c.beginPath();c.arc(x,top-5,big?10:7,0,7);c.fill();
+      if(isSel||big){
+        const txt=fmtHz(f)+' Hz';c.font=(big?'bold 14px':'bold 12px')+' system-ui,sans-serif';
+        const tw=c.measureText(txt).width+16,bx=clamp(x-tw/2,0,w-tw);
+        c.fillStyle=col;c.beginPath();c.roundRect(bx,0,tw,bh,7);c.fill();
+        c.fillStyle='#1a1200';c.fillText(txt,bx+tw/2,bh-(big?7:5));c.font='11px system-ui,sans-serif';
+      }
     });
   }
 }
-new Ruler($('#rTone'),['tone.freq']);
-new Ruler($('#rBurst'),['burst.freq']);
-new Ruler($('#rBand'),['band.f1','band.f2']);
-const rSweep=new Ruler($('#rSweep'),['sweep.f1','sweep.f2'],{cursor:true});
+class FineRuler extends Ruler{
+  constructor(cv,main){super(cv,main.paths,{cursor:main.cursor});this.main=main;this.c=null;}
+  cur(){return this.main.cur();}
+  pick(){return this.main.cur();}
+  unit(){return fstep();}
+  step(f){const s=fstep();return +(Math.round(f/s)*s).toFixed(3);}
+  rng(){
+    const span=Math.min(+S.zoom,S.max-S.min),f=get(this.paths[this.main.cur()]);
+    if(this.drag<0||this.c===null)this.c=f;
+    const lo=clamp(this.c-span/2,S.min,S.max-span);return{lo,hi:lo+span,log:false};
+  }
+}
+const mTone=new Ruler($('#rTone'),['tone.freq']);new FineRuler($('#fTone'),mTone);
+const mBurst=new Ruler($('#rBurst'),['burst.freq']);new FineRuler($('#fBurst'),mBurst);
+const mBand=new Ruler($('#rBand'),['band.f1','band.f2']);new FineRuler($('#fBand'),mBand);
+const rSweep=new Ruler($('#rSweep'),['sweep.f1','sweep.f2'],{cursor:true});new FineRuler($('#fSweep'),rSweep);
 
 function renderChips(){
   const box=$('#chips');box.innerHTML='';
