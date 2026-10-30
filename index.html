@@ -66,12 +66,31 @@ details p{color:var(--mut);font-size:13px;margin:8px 0}
 .hint{color:var(--mut);font-size:12px;margin-top:6px}
 .warn{border-color:#6b4a0c;background:#1d1708;color:#e7c27b;font-size:13px}
 @media (max-width:420px){.f{grid-template-columns:1fr}.f output{text-align:left}.readout b{font-size:46px}}
+.cols,.col{display:grid;gap:12px;min-width:0}
+.col{align-content:start}
+@media (min-width:900px){
+  .wrap{max-width:none;padding:16px 28px 36px;gap:16px}
+  .cols{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px;align-items:start}
+  .col{gap:16px}
+  .card{padding:18px}
+  #scope{height:min(26vh,240px)}
+  .readout b{font-size:76px}.readout small{font-size:24px}
+  .readout.wide b{font-size:52px}
+  #rTone,#rBurst,#rSweep,#rBand{height:130px!important}
+  #eHarm{height:150px!important}#eDraw{height:170px!important}
+}
+@media (min-width:1500px){
+  .wrap{padding:20px 48px 44px}
+  .cols{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:28px}
+  .f{grid-template-columns:150px 1fr}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <header><h1>Shaker<span>Lab</span></h1><span class="chip" id="status">Fermo</span></header>
+<div class="cols"><div class="col">
 
 <section class="card">
   <div class="readout" id="readout"><b id="rf">40.0</b><small>Hz</small></div>
@@ -156,6 +175,7 @@ details p{color:var(--mut);font-size:13px;margin:8px 0}
   <div class="hint">Il rumore viene filtrato (taglio ripido, 4° ordine) nella banda scelta e moltiplicato per una sinusoide: “AM” = sinusoide continua alla frequenza modulante; “arco” = un’unica mezza sinusoide che sale e scende lungo tutta la durata. Questa modalità usa il proprio rumore: la forma d'onda scelta sotto non influisce. Il livello non è calibrato fra bande diverse: parti con volume basso.</div>
 </section>
 
+</div><div class="col">
 <!-- ONDA -->
 <section class="card">
   <h2>Forma d'onda</h2>
@@ -205,6 +225,7 @@ details p{color:var(--mut);font-size:13px;margin:8px 0}
   <p>Il jack/DAC di telefoni e PC è accoppiato in AC: sotto ~20 Hz il segnale cala molto. Per frequenze molto basse usa una scheda audio / DAC USB con risposta estesa. Su iPhone: interruttore silenzioso e volume di sistema contano; il volume di sistema va tenuto fisso e regolato qui.</p></details>
 </section>
 
+</div></div>
 </div>
 
 <script>
