@@ -278,7 +278,7 @@ function limits(p){
   if(p==='out.vol')return[0,S.out.cap];
   return LIM[p]||[-Infinity,Infinity];
 }
-const volGain=v=>clamp(v,0,S.out.cap)/100;
+const volGain=v=>clamp(v,0,S.out.cap)/100*0.9;
 const dB=g=>g<=0?'−∞ dB':(20*Math.log10(g)).toFixed(0)+' dB';
 const fmtHz=f=>f<100?f.toFixed(2):f<1000?f.toFixed(1):(f/1000).toFixed(2)+'k';
 const FMT={
@@ -302,8 +302,9 @@ function ensureCtx(){
   E.master=ctx.createGain();E.master.gain.value=0;
   E.gL=ctx.createGain();E.gR=ctx.createGain();
   E.merger=ctx.createChannelMerger(2);
-  E.comp=ctx.createDynamicsCompressor();
-  E.comp.threshold.value=-2;E.comp.knee.value=0;E.comp.ratio.value=20;E.comp.attack.value=0.003;E.comp.release.value=0.1;
+  // limitatore senza memoria: trasparente fino a 0.9, poi curva morbida (niente attacco/rilascio, quindi niente pompaggio a bassa frequenza)
+  E.comp=ctx.createWaveShaper();
+  {const N=4097,c=new Float32Array(N);for(let i=0;i<N;i++){const x=i/(N-1)*2-1,a=Math.abs(x);c[i]=a<=0.9?x:Math.sign(x)*(0.9+0.1*Math.tanh((a-0.9)/0.1));}E.comp.curve=c;}
   E.an=ctx.createAnalyser();E.an.fftSize=16384;E.an.smoothingTimeConstant=0;
   E.buf=new Float32Array(E.an.fftSize);
   E.oscG.connect(E.env);E.nG.connect(E.env);
@@ -820,8 +821,8 @@ function drawScope(){
       c.moveTo(x,mid-clamp(mx*sc,-1,1)*A);c.lineTo(x,mid-clamp(mn*sc,-1,1)*A);}
   }
   c.stroke();
-  let pk=0;for(let i=N-2048;i<N;i++){const a=Math.abs(buf[i]);if(a>pk)pk=a;}
-  E.lvl=Math.max(pk,E.lvl*0.9);
+  let pk=0;for(let i=N-8192;i<N;i++){const a=Math.abs(buf[i]);if(a>pk)pk=a;}
+  E.lvl=Math.max(pk,E.lvl*0.97);
 }
 let lastRf='';
 function frame(){
