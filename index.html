@@ -100,7 +100,7 @@ details p{color:var(--mut);font-size:13px;margin:8px 0}
 <body>
 <div class="wrap">
 
-<header><h1>Shaker<span>Lab</span> <small class="ver">v7</small></h1><span class="chip" id="status">Fermo</span></header>
+<header><h1>Shaker<span>Lab</span> <small class="ver">v8</small></h1><span class="chip" id="status">Fermo</span></header>
 <div class="top">
 
 <section class="card">
@@ -210,6 +210,7 @@ details p{color:var(--mut);font-size:13px;margin:8px 0}
   <div class="f"><label>Limite massimo</label><div class="ctl"><input type="range" min="5" max="100" step="1" data-k="out.cap"><output data-o="out.cap"></output></div></div>
   <div class="f"><label>Canali</label><div class="seg" data-seg="out.chan"><button data-v="lr">L+R</button><button data-v="l">Solo L</button><button data-v="r">Solo R</button><button data-v="bridge">R invertito</button></div></div>
   <div class="f"><label>Verifica uscita</label><div class="ctl"><button id="btnBeep">🔔 Beep 440 Hz</button><span class="hint" style="margin:0">Se senti il beep ma non il tono basso, l'altoparlante non riproduce i bassi: serve lo shaker (o un subwoofer).</span></div></div>
+  <div class="hint" id="audioinfo">Info audio: avvia il suono per vederle</div>
   <div class="f" id="sinkRow" hidden><label>Dispositivo audio</label><div class="ctl"><button id="btnSink">🔊 Scegli uscita…</button><button id="btnSinkReset" hidden>Predefinita</button></div></div>
   <div class="hint" id="sinkName" hidden></div>
   <details style="margin-top:12px"><summary>Modulazione d'ampiezza (tremolo)</summary>
@@ -845,6 +846,12 @@ function frame(){
     if(left<=0){stop();}else{const s=Math.ceil(left/1000);$('#timerleft').textContent='Stop automatico tra '+Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
   }else $('#timerleft').textContent='';
   if(S.mode==='sweep')rSweep.draw();
+  const now=performance.now();
+  if(E.ctx&&now-(E.infoT||0)>1000){
+    E.infoT=now;const c=E.ctx;let u='';
+    try{if(c.playbackStats&&c.playbackStats.underrunEvents!==undefined)u=' · salti audio '+c.playbackStats.underrunEvents;}catch(e){}
+    $('#audioinfo').textContent='Info audio: '+c.sampleRate+' Hz · stato '+c.state+' · latenza '+Math.round((c.baseLatency||0)*1000)+'/'+Math.round((c.outputLatency||0)*1000)+' ms'+u+' · '+(navigator.userAgent.match(/(Edg|Chrome|Firefox|Safari)\/[\d.]+/)||[''])[0];
+  }
 }
 
 /* ---------- INPUT GLOBALI ---------- */
