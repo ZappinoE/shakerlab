@@ -254,14 +254,15 @@ const DEF={
   sweep:{f1:10,f2:200,dur:20,curve:'log',dir:'up',loop:true},
   band:{f1:20,f2:80,noise:'white',mtype:'am',mrate:4,depth:100,dur:5,pause:2,count:0},
   wave:{type:'sine',duty:50,harm:[1,0,0,0,0,0,0,0,0,0,0,0],draw:null},
-  out:{vol:20,cap:60,chan:'lr'},
+  out:{vol:50,cap:100,chan:'lr'},
   am:{on:false,rate:4,depth:50,shape:'sine'},
   flt:{hpOn:true,hp:5,lpOn:false,lp:300},
   timer:0,marks:[],zoom:'10'
 };
 function merge(t,s){for(const k in s){if(s[k]&&typeof s[k]==='object'&&!Array.isArray(s[k])&&t[k]&&typeof t[k]==='object')merge(t[k],s[k]);else t[k]=s[k];}}
 let S=clone(DEF);
-try{const j=JSON.parse(localStorage.getItem('shakerlab.state')||'null');if(j)merge(S,j);}catch(e){}
+try{const j=JSON.parse(localStorage.getItem('shakerlab.state')||'null');if(j){merge(S,j);if(j.ver!==2){S.out.vol=50;S.out.cap=100;}}}catch(e){}
+S.ver=2;
 if(!Array.isArray(S.wave.draw)||S.wave.draw.length!==256)S.wave.draw=sine256();
 const get=p=>p.split('.').reduce((o,k)=>o?.[k],S);
 function put(p,v){const ks=p.split('.'),l=ks.pop();ks.reduce((o,k)=>o[k],S)[l]=v;}
@@ -277,7 +278,7 @@ function limits(p){
   if(p==='out.vol')return[0,S.out.cap];
   return LIM[p]||[-Infinity,Infinity];
 }
-const volGain=v=>Math.pow(clamp(v,0,S.out.cap)/100,2);
+const volGain=v=>clamp(v,0,S.out.cap)/100;
 const dB=g=>g<=0?'−∞ dB':(20*Math.log10(g)).toFixed(0)+' dB';
 const fmtHz=f=>f<100?f.toFixed(2):f<1000?f.toFixed(1):(f/1000).toFixed(2)+'k';
 const FMT={
@@ -417,7 +418,7 @@ function applyBand(){
   const t=E.ctx.currentTime,[lo,hi0]=bandEdges(),ny=E.ctx.sampleRate/2,b=S.band,hi=Math.min(hi0,ny*0.9);
   [E.bhp1,E.bhp2].forEach(f=>f.frequency.setTargetAtTime(lo,t,0.02));
   [E.blp1,E.blp2].forEach(f=>f.frequency.setTargetAtTime(hi,t,0.02));
-  E.bIn.gain.setTargetAtTime(clamp(Math.sqrt(ny/Math.max(hi-lo,1)),1,200),t,0.02);
+  E.bIn.gain.setTargetAtTime(clamp(1.8*Math.sqrt(ny/Math.max(hi-lo,1)),1.8,400),t,0.02);
   const d=b.mtype==='am'?b.depth/100:0;
   E.bMod.gain.setTargetAtTime(1-d/2,t,0.02);
   E.blfoG.gain.setTargetAtTime(d/2,t,0.02);
