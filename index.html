@@ -20,6 +20,7 @@ body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-appl
 .wrap{max-width:760px;margin:0 auto;padding:12px 16px 48px;display:grid;gap:12px}
 header{display:flex;align-items:center;justify-content:space-between}
 h1{font-size:20px;margin:0;letter-spacing:.3px}h1 span{color:var(--acc)}
+.ver{font-size:11px;font-weight:400;color:var(--mut);letter-spacing:0}
 h2{font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:var(--mut);margin:0 0 10px;font-weight:600}
 .chip{font-size:12px;padding:3px 10px;border-radius:99px;background:var(--card2);color:var(--mut);border:1px solid var(--line)}
 .chip.live{background:var(--accd);color:var(--acc);border-color:#6b4a0c}
@@ -99,7 +100,7 @@ details p{color:var(--mut);font-size:13px;margin:8px 0}
 <body>
 <div class="wrap">
 
-<header><h1>Shaker<span>Lab</span></h1><span class="chip" id="status">Fermo</span></header>
+<header><h1>Shaker<span>Lab</span> <small class="ver">v7</small></h1><span class="chip" id="status">Fermo</span></header>
 <div class="top">
 
 <section class="card">
@@ -293,7 +294,7 @@ const E={ctx:null,playing:false,osc:null,nsrc:null,nkind:'',lfo:null,voices:[],n
 
 function ensureCtx(){
   if(E.ctx)return;
-  const ctx=new (window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});
+  const ctx=new (window.AudioContext||window.webkitAudioContext)({latencyHint:'playback'});
   E.ctx=ctx;
   E.env=ctx.createGain();E.env.gain.value=0;
   E.oscG=ctx.createGain();E.nG=ctx.createGain();E.nG.gain.value=0;
