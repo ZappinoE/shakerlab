@@ -1,0 +1,33 @@
+{
+  "name": "shakerlab",
+  "version": "1.0.0",
+  "description": "Generatore di segnali audio per shaker",
+  "main": "main.js",
+  "author": "ZappinoE",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win portable"
+  },
+  "build": {
+    "appId": "it.shakerlab.app",
+    "productName": "ShakerLab",
+    "files": [
+      "main.js",
+      "icon.png",
+      "app/**"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "portable"
+      ],
+      "icon": "icon.png"
+    }
+  },
+  "devDependencies": {
+    "electron": "^45.2.3",
+    "electron-builder": "^26.18.0"
+  }
+}

@@ -1,0 +1,4 @@
+ShakerLab.exe
+node_modules/
+dist/
+desktop/app/
